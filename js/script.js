@@ -12,7 +12,7 @@ function callbackLoad() {
 function callbackPredict(err, results) {
     result = results;
     cenEle = document.getElementById('censoredImage');
-    if(result['outputs'][0].score > 0.8){
+    if(result['outputs'][0].score > 0.7){
         cenEle.setAttribute('src', imgSrc);
         cenEle.classList.remove("hide");
         x = result["outputs"][0].box.x;
@@ -25,7 +25,8 @@ function callbackPredict(err, results) {
         overlay.style.height = h+'px';
         overlay.style.width = w+'px';
     }else{
-        console.log('score not greater than 0.8');
+        console.log('score not greater than 0.7');
+        alert('Face detection score, lower than 70%');
     }
 }
 
@@ -46,7 +47,6 @@ function uploadImage(){
 
         reader.onload = imageIsLoaded;
         reader.readAsDataURL(uploadedImage.files[0]);
-        console.log("treached here");
     }else{
         console.log("no files");
     }
