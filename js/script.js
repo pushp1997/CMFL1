@@ -1,6 +1,8 @@
 imgUploaded = null;
-rawEle = null;;
+result = null;
+rawEle = null;
 cenEle = null;
+imgSrc = null;
 
 function callbackLoad() {
     console.log('callback after face detection model is loaded!');
@@ -8,10 +10,23 @@ function callbackLoad() {
 
 // callback after prediction
 function callbackPredict(err, results) {
-    console.log(results);
-
-    // draw output keypoints in the image
-    //model.draw(document.getElementById('myCanvas'), document.getElementById('image'), results);
+    result = results;
+    cenEle = document.getElementById('censoredImage');
+    if(result['outputs'][0].score > 0.8){
+        cenEle.setAttribute('src', imgSrc);
+        cenEle.classList.remove("hide");
+        x = result["outputs"][0].box.x;
+        y = result["outputs"][0].box.y;
+        h = result["outputs"][0].box.height;
+        w = result["outputs"][0].box.width;
+        overlay = document.getElementById('overlay');
+        overlay.style.transform="translate("+x+"px,"+y+"px)";
+        overlay.classList.remove("hide");
+        overlay.style.height = h+'px';
+        overlay.style.width = w+'px';
+    }else{
+        console.log('score not greater than 0.8');
+    }
 }
 
 async function detectFaces(){
@@ -25,11 +40,12 @@ async function detectFaces(){
 }
 
 function uploadImage(){
-    if (document.getElementById('uploadImage').files && document.getElementById('uploadImage').files[0]) {
+    uploadedImage = document.getElementById('uploadImage');
+    if (uploadedImage.files && uploadedImage.files[0]) {
         var reader = new FileReader();
 
         reader.onload = imageIsLoaded;
-        reader.readAsDataURL(document.getElementById('uploadImage').files[0]);
+        reader.readAsDataURL(uploadedImage.files[0]);
         console.log("treached here");
     }else{
         console.log("no files");
@@ -38,6 +54,7 @@ function uploadImage(){
 }
 function imageIsLoaded(e) {
     rawEle = document.getElementById('rawImage');
-    rawEle.setAttribute('src', e.target.result);
+    imgSrc = e.target.result;
+    rawEle.setAttribute('src', imgSrc);
     rawEle.classList.remove("hide");
 };
