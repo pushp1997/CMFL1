@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CMF-L1</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>Censor my face.</header>
+    <input type="file" id="uploadImage" onchange="uploadImage();" /><br>
+    <img class="hide" id="rawImage" src="" alt="Raw Image Uploaded"><br> 
+    <img class="hide" id="censoredImage" src="" alt="Image after Censoring"><br>
+    
+    <!-- importing js files -->
+    <script src="https://stackml.com/library-js/stackml.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
