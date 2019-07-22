@@ -36,7 +36,6 @@ async function detectFaces(){
     const model = await stackml.faceDetection(callbackLoad);
 
     // make prediction with the image
-    console.log(rawEle);
     model.detect(rawEle, callbackPredict);
 }
 
@@ -52,9 +51,24 @@ function uploadImage(){
     }
     detectFaces();
 }
+
 function imageIsLoaded(e) {
     rawEle = document.getElementById('rawImage');
     imgSrc = e.target.result;
-    rawEle.setAttribute('src', imgSrc);
-    rawEle.classList.remove("hide");
+    imageResizer();
 };
+
+function imageResizer(){
+    var img = new Image();
+    img.src = imgSrc;
+    img.onload = function(){
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = 400;
+        canvas.height = canvas.width * (img.height/img.width);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        imgSrc = canvas.toDataURL('image/png');
+        rawEle.setAttribute('src', imgSrc);
+        rawEle.classList.remove("hide");
+    };
+}
